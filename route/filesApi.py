@@ -5,6 +5,8 @@ from flask_restful import Api, Resource
 from flask import current_app
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import NotFound, BadRequest
+from infrastructure.database import db_session
+from models.Location import Location
 import json
 
 ALLOWED_EXTENSIONS = {"json", "csv"}
@@ -18,6 +20,7 @@ def allowed_file(filename):
 
 
 class Files(Resource):
+
 
     def get(self, file_name):
         try:
@@ -40,14 +43,25 @@ class Files(Resource):
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+            path_save = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+            file.save(path_save)
             # todo: arreglar que se devuelva la url de descarga bien
-            return {'download_url': "" + url_for('download_file', name=filename)}, 201
+            #return {'download_url': "" + url_for('download_file', name=filename)}, 201
         else:
             raise BadRequest("Not allowed file extension")
 
         #todo: agregar el guardado en bd
 
+        # read file and save in db
+        file_json = open(path_save, encoding="mbcs")
+        data = json.loads(file_json.read())
+
+        #recorrer el json y guardarlo en la bd
+        for item in data:
+            location = Location(name=item['nombre'], lat=item['longitud'], lng=item['latitud'])
+            db_session.add(location)
+            db_session.commit()
+        return {'message': "All locations has been saved"}, 201
 
 api.add_resource(Files, '/files/<string:file_name>', '/files')
 # export api_bp

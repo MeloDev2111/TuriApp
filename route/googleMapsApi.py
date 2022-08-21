@@ -32,6 +32,8 @@ def map_to_distance_duration_matrix(response_google_maps_api: dict) -> list:
 
 class MatrixDistanceDuration(Resource):
 
+# ----------------------------------------------------------------------------------------------------------------------
+
     def get(self):
         duration_matrix_file_name = current_app.config['DURATION_MATRIX_FILE_NAME']
         distance_matrix_file_name = current_app.config['DISTANCE_MATRIX_FILE_NAME']
@@ -49,6 +51,8 @@ class MatrixDistanceDuration(Resource):
 
         #todo: for testing -- BORRAR
         return {'message': "generating matrix"}, 200
+
+        # --------------------------------------------------------------------------------------------------------------
 
         gmaps = googlemaps.Client(key=current_app.config['GOOGLE_MAPS_API_KEY'])
         # todo: get touristic locations formatted {"lat" : -33.867486, "lng" : 151.206990} <- Arreglo de este objeto
@@ -87,6 +91,8 @@ class MatrixDistanceDuration(Resource):
                        delimiter=", ",
                        fmt='% s')
             return {}, 201
+
+# ----------------------------------------------------------------------------------------------------------------------
 
     def delete(self):
         # todo: Elimina los archivos csv de matrix de distancia y matrix de duracion

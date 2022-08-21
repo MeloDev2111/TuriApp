@@ -6,7 +6,7 @@ from infrastructure.ma import ma
 app = Flask(__name__)
 CORS(app, resources=[r"/files/*"], origins="http://localhost:8000")
 
-app.config.from_object("config.DevelopmentConfig")
+app.config.from_object("config")
 
 with app.app_context():
     from infrastructure.database import init_db

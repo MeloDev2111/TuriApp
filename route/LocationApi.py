@@ -30,14 +30,30 @@ class LocationResource(Resource):
         return location_schema.jsonify(location), 201
 
     def delete(self, id):
-        # todo: arreglar
-        location = Location.query.get(id)
-        db_session.delete(location)
-        db_session.commit()
-        return location_schema.jsonify(location), 204
+        try:
+            location = Location.query.where(Location.id == id).first()
+            print("location: " + str(location))
+            db_session.delete(location)
+            db_session.commit()
+            return {'message': 'Location deleted'}, 204
+        except Exception as e:
+            return {'message': str(e) }, 404
 
+    def put(self, id):
+        # update location
+        location = Location.query.where(Location.id == id).first()
 
-api.add_resource(LocationResource, '/locations', '/locations/<int:id>', '/locations')
+        if location:
+            location.name = request.json['name']
+            location.lat = request.json['lat']
+            location.lng = request.json['lng']
+
+            db_session.commit()
+            return {'message': 'Location updated'}, 200
+        else:
+            return {'message': 'Location not found'}, 404
+
+api.add_resource(LocationResource, '/locations', '/locations/<int:id>', '/locations/<int:id>', '/locations/<int:id>')
 
 
 @deleteAllLocationsRoute.route('/delete/all')
