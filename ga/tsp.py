@@ -47,7 +47,7 @@ class TSPViajero:
             stats.register("min", np.min)
             stats.register("max", np.max)
 
-            algorithms.eaSimple(pop, toolbox, 0.7, 0.2, 100, stats=stats,
+            algorithms.eaSimple(pop, toolbox, 0.7, 0.2, 2000, stats=stats,
                                 halloffame=hof)
 
             return hof
