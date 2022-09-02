@@ -13,9 +13,9 @@ class TSPViajero:
         self.route = ""
         self.distance = 0
 
-    def implementAlgorithm(self, tsp):
-        distance_map = tsp["DistanceMatrix"]
-        pop_size = tsp["TourSize"]
+    def implementAlgorithm(self, distance_matrix, tour_size):
+        distance_map = distance_matrix
+        pop_size = tour_size
 
         creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
         creator.create("Individual", array.array, typecode='i', fitness=creator.FitnessMin)
@@ -32,13 +32,13 @@ class TSPViajero:
             return distance,
 
         toolbox.register("mate", tools.cxPartialyMatched)
-        toolbox.register("mutate", tools.mutShuffleIndexes, indpb=0.05)
-        toolbox.register("select", tools.selTournament, tournsize=30)
+        toolbox.register("mutate", tools.mutShuffleIndexes, indpb=1.0 / pop_size)
+        toolbox.register("select", tools.selTournament, tournsize=5)
         toolbox.register("evaluate", evalTSP)
 
         def main():
-            random.seed(169)
-            pop = toolbox.population(n=300)
+            random.seed(150)
+            pop = toolbox.population(n=pop_size)
             hof = tools.HallOfFame(1)
 
             stats = tools.Statistics(lambda ind: ind.fitness.values)
@@ -47,7 +47,7 @@ class TSPViajero:
             stats.register("min", np.min)
             stats.register("max", np.max)
 
-            algorithms.eaSimple(pop, toolbox, 0.7, 0.2, 100, stats=stats,
+            algorithms.eaSimple(pop, toolbox, 0.7, 0.2, 2000, stats=stats,
                                 halloffame=hof)
 
             return hof
