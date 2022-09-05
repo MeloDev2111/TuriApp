@@ -20,6 +20,7 @@ from route.downloadFile import downloadRoute
 from route.scraperApi import scraper_bp
 from route.LocationApi import location_bp, deleteAllLocationsRoute
 from route.googleMapsApi import maps_bp
+from route.viajeroApi import viajero_bp
 
 
 app.register_blueprint(scraper_bp)
@@ -28,6 +29,7 @@ app.register_blueprint(downloadRoute)
 app.register_blueprint(location_bp)
 app.register_blueprint(deleteAllLocationsRoute)
 app.register_blueprint(maps_bp)
+app.register_blueprint(viajero_bp)
 
 api = Api(app)
 app.add_url_rule(

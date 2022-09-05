@@ -1,13 +1,10 @@
-import json
-
-from flask import Blueprint, current_app
-from flask_restful import Api, Resource
-from werkzeug.exceptions import BadGateway
-from models.Location import Location
 import googlemaps
 import numpy as np
 import pandas as pd
+from flask import Blueprint, current_app
+from flask_restful import Api, Resource
 
+from models.Location import Location
 from route.LocationApi import locations_schema
 
 maps_bp = Blueprint('maps_api', __name__)
@@ -50,7 +47,7 @@ def map_to_duration_matrix(response_google_maps_api: dict, index_origin: int) ->
 
 class MatrixDistanceDuration(Resource):
 
-# ----------------------------------------------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------------------------------------
 
     def get(self):
         duration_matrix_file_name = current_app.config['DURATION_MATRIX_FILE_NAME']
@@ -67,8 +64,8 @@ class MatrixDistanceDuration(Resource):
         except FileNotFoundError:
             pass
 
-        #todo: for testing -- BORRAR
-        #return {'message': "generating matrix"}, 200
+        # todo: for testing -- BORRAR
+        # return {'message': "generating matrix"}, 200
 
         # --------------------------------------------------------------------------------------------------------------
 
@@ -112,11 +109,13 @@ class MatrixDistanceDuration(Resource):
 
         arr = np.asarray(all_results_distance)
         df = pd.DataFrame(arr)
-        df.to_csv(current_app.config['UPLOAD_FOLDER'] + "/" + current_app.config['DISTANCE_MATRIX_FILE_NAME'], header=False, index=False)
+        df.to_csv(current_app.config['UPLOAD_FOLDER'] + "/" + current_app.config['DISTANCE_MATRIX_FILE_NAME'],
+                  header=False, index=False)
 
         arr = np.asarray(all_results_duration)
         df = pd.DataFrame(arr)
-        df.to_csv(current_app.config['UPLOAD_FOLDER'] + "/" + current_app.config['DURATION_MATRIX_FILE_NAME'], header=False, index=False)
+        df.to_csv(current_app.config['UPLOAD_FOLDER'] + "/" + current_app.config['DURATION_MATRIX_FILE_NAME'],
+                  header=False, index=False)
 
         return {}, 201
 
@@ -129,4 +128,3 @@ class MatrixDistanceDuration(Resource):
 
 api.add_resource(MatrixDistanceDuration, '/generate_matrices')
 # export api_bp
-

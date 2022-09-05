@@ -1,7 +1,7 @@
+import requests
 from flask import Blueprint, current_app
 from flask_restful import Api, Resource
 from werkzeug.exceptions import BadGateway
-import requests
 
 scraper_bp = Blueprint('scraper_api', __name__)
 api = Api(scraper_bp)

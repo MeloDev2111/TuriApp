@@ -13,7 +13,8 @@ API for the application of genetic algorithms in tourism
     ```
     pip install -r requirements.txt
     ```
-3. Start the server with:
+3. create the config file named `config.py` 
+4. Start the server with:
     ```
     flask run
     ```
